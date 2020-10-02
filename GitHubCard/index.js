@@ -1,8 +1,12 @@
+import axios from 'axios';
+
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+axios.get("https://api.github.com/users/joseph-vega12")
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -12,10 +16,18 @@
     Skip to STEP 3.
 */
 
+
 /*
   STEP 4: Pass the data received from Github into your function,
     and append the returned markup to the DOM as a child of .cards
 */
+.then(res => {
+  const name = res.data.name;
+  startOfCards.append(createUserCards(res.data));
+})
+.catch(err =>{
+  console.log("this is an", err);
+})
 
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
@@ -49,6 +61,61 @@ const followersArray = [];
       </div>
     </div>
 */
+const startOfCards = document.querySelector(".cards");
+
+function createUserCards(obj){
+
+//OUTER CARD CONTAINER //
+  const cardContainer = document.createElement("div");
+  const cardImage = document.createElement("img");
+
+  //START OF THE INNER CARD CONTAINER //
+  const cardInfoDiv = document.createElement("div");
+  const usersName = document.createElement("h3");
+  const userName = document.createElement("p");
+  const location = document.createElement("p");
+
+  //LINK ADDRESS IS NESTED INSIDE OF PROFILE // 
+  const profile = document.createElement("p");
+  const linkAddress = document.createElement("a");
+
+  const followers = document.createElement("p");
+  const following = document.createElement("p");
+  const userBio = document.createElement("p");
+
+  cardImage.src = obj.avatar_url;
+  usersName.textContent = obj.name;
+  userName.textContent = obj.login;
+  location.textContent = obj.location;
+  profile.textContent = 'Profile: ';
+  linkAddress.textContent = obj.html_url;
+  followers.textContent = `Followers: ${obj.followers}`;
+  following.textContent = `Following ${obj.following}` 
+  userBio.textContent = `Bio ${obj.bio}`;
+
+  cardContainer.appendChild(cardImage);
+  cardContainer.appendChild(cardInfoDiv);
+  cardInfoDiv.appendChild(usersName);
+  cardInfoDiv.appendChild(userName);
+  cardInfoDiv.appendChild(location);
+  
+  // APPENDS LINK TO THE PROFILE P TAG //
+  cardInfoDiv.appendChild(profile); 
+  profile.appendChild(linkAddress);
+
+  cardInfoDiv.appendChild(followers);
+  cardInfoDiv.appendChild(following);
+  cardInfoDiv.appendChild(userBio);
+
+  cardContainer.classList.add("card")
+  cardInfoDiv.classList.add("card-info");
+  usersName.classList.add("name");
+  userName.classList.add("userName");
+  
+  return cardContainer;
+}
+
+// console.log(createUserCards());
 
 /*
   List of LS Instructors Github username's:
